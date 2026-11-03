@@ -20,6 +20,9 @@ WINDOW_START = 1700   # 28:20 in seconds
 SOUND_FILE = os.getenv("SUMMON_SOUND", os.path.join(os.path.dirname(os.path.abspath(__file__)), "summon.wav"))
 TOKEN = os.environ["DISCORD_TOKEN"]
 
+import importlib.util
+print("discord.py", discord.__version__, "| davey installed:", importlib.util.find_spec("davey") is not None, flush=True)
+
 
 def fmt(seconds: int) -> str:
     return f"{seconds // 60}:{seconds % 60:02d}"
