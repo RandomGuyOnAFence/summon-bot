@@ -1,13 +1,20 @@
-FROM python:3.12-slim
+# 1. Use the official Node.js image (Lightweight version)
+FROM node:20-bookworm-slim
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends ffmpeg libopus0 \
-    && rm -rf /var/lib/apt/lists/*
+# 2. Install FFmpeg AND the C++ build tools required by Discord's audio engine
+RUN apt-get update && \
+    apt-get install -y ffmpeg make g++ python3 build-essential && \
+    rm -rf /var/lib/apt/lists/*
 
+# 3. Create a working directory for the bot
 WORKDIR /app
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
 
+# 4. Copy your package.json and install dependencies
+COPY package*.json ./
+RUN npm install
+
+# 5. Copy the rest of your bot's files (bot.js, Audios folder, etc.)
 COPY . .
 
-CMD ["python", "-u", "bot.py"]
+# 6. Start the bot
+CMD ["node", "bot.js"]
