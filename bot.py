@@ -114,6 +114,17 @@ async def summon_status(interaction: discord.Interaction):
     await interaction.response.send_message(msg)
 
 
+@summon.command(name="test", description="Play the summon sound now in your voice channel")
+async def summon_test(interaction: discord.Interaction):
+    voice = getattr(interaction.user, "voice", None)
+    if voice is None or voice.channel is None:
+        await interaction.response.send_message("Join a voice channel first.", ephemeral=True)
+        return
+    await interaction.response.defer()
+    await bot.play_in_guild(interaction.guild_id, voice.channel.id)
+    await interaction.followup.send("Playing the summon sound.")
+
+
 bot.tree.add_command(enable)
 bot.tree.add_command(disable)
 bot.tree.add_command(summon)
