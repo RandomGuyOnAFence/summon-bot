@@ -62,7 +62,12 @@ class SummonBot(discord.Client):
 
         if vc.is_playing():
             vc.stop()
-        vc.play(discord.FFmpegPCMAudio(SOUND_FILE))
+        print("sound exists:", os.path.exists(SOUND_FILE), SOUND_FILE, flush=True)
+
+        def _after(err):
+            print("playback done:", err or "OK", flush=True)
+
+        vc.play(discord.FFmpegPCMAudio(SOUND_FILE), after=_after)
 
 
 bot = SummonBot()
